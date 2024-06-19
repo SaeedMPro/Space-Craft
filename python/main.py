@@ -1,7 +1,7 @@
 from typing import List
 from dataclasses import dataclass
 
-testcase: str = "/home/acontius/amin/Learning/uni/4thsemester/algo/Project/Space-Craft/cpp/testcase.txt"
+testcase: str = "/home/acontius/amin/Learning/uni/4thsemester/algo/Project/testcase.txt"
 
 @dataclass
 class Location:
