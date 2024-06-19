@@ -1,0 +1,7 @@
+Explanation :
+    main.py: Handles program flow, input/output, and overall orchestration.
+    spacecraft.py: Encapsulates the spacecraft's capabilities and interactions with the environment.
+    map.py: Manages the spatial representation of the environment and the spacecraft's movement within it.
+    logging.py: Records and manages the log of actions and their outcomes.
+    routing.py: Implements the algorithmic logic to guide Falcon II back to the home location.
+
