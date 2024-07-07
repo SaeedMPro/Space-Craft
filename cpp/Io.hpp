@@ -1,6 +1,7 @@
 #ifndef IO_HPP
 #define IO_HPP
 
+#include "Cardinal.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,12 +9,8 @@
 
 using namespace std;
 
-struct Location {
-    int x;
-    int y;
-};
 
-tuple<vector<int>, Location, int, vector<vector<int>>> readInputFile(const string& file_path);
+tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const string& file_path);
 bool WriteLogFile(const string& file_path);
 
 #endif

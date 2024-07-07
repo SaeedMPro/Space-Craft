@@ -1,15 +1,12 @@
 #ifndef ROUTING_UNIT_HPP
 #define ROUTING_UNIT_HPP
-#include "spaceCraft.hpp"
-#include "Map.hpp"
 
-struct Cardinal {
-    int x, y;
-};
+#include "Map.hpp"
+#include "SpaceCraft.hpp"
+#include "Cardinal.hpp"
 
 
 class RoutingUnit {
-
     public:
         RoutingUnit() {}
         ~RoutingUnit() {}
@@ -19,8 +16,8 @@ class RoutingUnit {
         SpaceCraft craft;
 
     public:
-       void navigate(Cardinal destination) {}
-
+        void startRU();
+        void navigate(Cardinal destination);
 };
 
 #endif

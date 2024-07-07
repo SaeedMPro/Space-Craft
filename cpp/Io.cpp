@@ -2,8 +2,11 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
-tuple<vector<int>, Location, int, vector<vector<int>>> readInputFile(const string& file_path) {
+using namespace std;
+
+tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const string& file_path) {
     ifstream file(file_path);
     if (!file.is_open()) {
         throw runtime_error("Couldn't find that file");
@@ -11,9 +14,9 @@ tuple<vector<int>, Location, int, vector<vector<int>>> readInputFile(const strin
 
     string line;
     vector<int> size;
-    Location location;
+    Cardinal location;
     int energy;
-    vector<vector<int>> space_map;
+    vector<vector<char>> spaceMap;
 
     if (getline(file, line)) {
         istringstream iss(line);
@@ -28,20 +31,18 @@ tuple<vector<int>, Location, int, vector<vector<int>>> readInputFile(const strin
         iss >> location.x >> location.y >> energy;
     }
 
-    while (getline(file, line)) {
-        istringstream iss(line);
-        vector<int> row;
-        int temp;
-        while (iss >> temp) {
-            row.push_back(temp);
+     while (getline(file, line)) {
+        vector<char> row;
+        for (char ch : line) {
+            if (ch != ' ') { 
+                row.push_back(ch);
+            }
         }
-        space_map.push_back(row);
+        spaceMap.push_back(row);
     }
-
-    return make_tuple(size, location, energy, space_map);
+    return make_tuple(size, location, energy, spaceMap);
 }
 
-bool WriteLogFile(const string &file_path)
-{
+bool WriteLogFile(const string &file_path) {
     return true;
 }
