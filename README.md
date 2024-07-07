@@ -1,6 +1,3 @@
-Here’s a sample README file with proper Markdown formatting that reflects the class diagram and project details:
-
----
 
 # Space Craft Project
 
