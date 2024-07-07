@@ -1,11 +1,11 @@
 #include <iostream>
-#include "spaceCraft.hpp"
+#include "Io.hpp"
 
 using namespace std;
 
 int main() {
     try {
-        auto [size, location, energy, space_map] = read_file("testcase.txt");
+        auto [size, location, energy, space_map] = readInputFile("testcase.txt");
 
         cout << "Size: ";
         for (const auto& s : size) {

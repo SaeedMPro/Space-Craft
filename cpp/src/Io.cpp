@@ -1,9 +1,9 @@
-#include "spaceCraft.hpp"
+#include "Io.hpp"
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
 
-tuple<vector<int>, Location, int, vector<vector<int>>> read_file(const string& file_path) {
+tuple<vector<int>, Location, int, vector<vector<int>>> readInputFile(const string& file_path) {
     ifstream file(file_path);
     if (!file.is_open()) {
         throw runtime_error("Couldn't find that file");
@@ -39,4 +39,9 @@ tuple<vector<int>, Location, int, vector<vector<int>>> read_file(const string& f
     }
 
     return make_tuple(size, location, energy, space_map);
+}
+
+bool WriteLogFile(const string &file_path)
+{
+    return true;
 }
