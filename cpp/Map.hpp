@@ -2,14 +2,17 @@
 #define MAP_HPP
 
 #include "SpaceCraft.hpp"
+#include "Phenomenon.hpp"
 #include "Cardinal.hpp"
 #include <vector>
 
 using namespace std;
 
 
-class SpaceCraft;  
-
+class SpaceCraft;
+class SpaceCurrent;
+class SpaceObject;
+class Wormhole;  
 class Map {
     public:
         Map() {}
@@ -23,9 +26,14 @@ class Map {
 
         std::vector<std::vector<char>> grid;
         SpaceCraft* craft;  
+        Cardinal destination;
         sizeMap size;
+        vector<SpaceCurrent> spaceCurrent;
+        SpaceObject spaceObject;
+        Wormhole wormhole;
 
     public:
+        void setPhenomenon();
         bool isValidMove(int& x, int& y);
         char getCellType(int& x, int& y);
 };

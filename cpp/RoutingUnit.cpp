@@ -13,6 +13,8 @@ void RoutingUnit::startRU() {
     Cardinal location;
     int energy;
     vector<vector<char>> spaceMap;
+
+    //Reading input from "testcase.txt".
     try {
         auto result = readInputFile("testcase.txt");
         size = get<0>(result);
@@ -38,11 +40,13 @@ void RoutingUnit::startRU() {
     } catch (const runtime_error& e) {
         cerr << e.what() << endl;
     }
-    SpaceCraft craft(energy, location);
-    Map currentMap(spaceMap, size, &craft);
 
+    // Initialize SpaceCraft and Map according to input.
+    craft = new SpaceCraft(energy, location);
+    currentMap = new Map(spaceMap, size, craft);
     
-    
+    currentMap->setPhenomenon();
+    craft->moveCraft(currentMap->destination);
 }
 
 void RoutingUnit::navigate(Cardinal destination) {

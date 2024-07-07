@@ -5,15 +5,16 @@
 #include "SpaceCraft.hpp"
 #include "Cardinal.hpp"
 
-
+class Map;
+class SpaceCraft;
 class RoutingUnit {
     public:
         RoutingUnit() {}
         ~RoutingUnit() {}
 
         int energy;
-        Map currentMap;
-        SpaceCraft craft;
+        Map* currentMap;
+        SpaceCraft* craft;
 
     public:
         void startRU();
