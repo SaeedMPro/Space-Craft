@@ -53,15 +53,25 @@ location: unknown
 
 The input is provided as a text file containing:
 - Size of the map matrix
-- Initial energy level of the spacecraft
-- Map matrix with encoded values representing different space phenomena
+- Start point and initial energy level of the spacecraft
+- Map matrix with encoded values representing different space phenomenon
+
+**spaceobject:** cells containing the number3 forming a 2-by-2 square represent
+ large spaceo bjects.
+
+**wormhole:** coupled cells containing the number 4 represent wormholes.
+
+**home:** The cell containing the number 5 is the destination of the space craft
+ (akahome).
+
+**spacecurrent:** Consecutive cells containing the number 1 at both ends and the
+ number 2 in the middle represent space currents.
+
 
 Example:
 ```
-7
-6
-50
-1000
+7 6
+5 0 1000
 004050
 033000
 033010
@@ -71,10 +81,20 @@ Example:
 000000
 ```
 
+
 ### Output Format
 
 The output is the result of the logging system detailing each decision made by the spacecraft, the energy consumed, and the time taken.
 
+ ## Scenarios
+
+ 1. **Infinite energy_no time constraint:** The spacecraftmust arriveat its
+ destinationwithoutfurtherchallenges.
+ 2. **Finite energy_no time constraint:** The spacecraftmust arrive at its
+ destinationbeforeitrunsoutof itslimitedsupplyofenergy.
+ 3. **Finiteenergy_timeconstraint:** Thespacecraftmustarriveatitsdestination
+ beforeitrunsoutof itslimitedsupplyofenergyintheshortestamount
+ timepossible
 ## Class Diagram
 
 //this will add after complete project.
