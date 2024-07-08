@@ -75,6 +75,5 @@ bool Map::isValidMove(int &x, int &y)
 }
 
 char Map::getCellType(int& x, int& y) {
-    // Implementation here
-    return ' '; // Placeholder
+    return grid[x][y]; 
 }

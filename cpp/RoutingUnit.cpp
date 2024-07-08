@@ -46,7 +46,9 @@ void RoutingUnit::startRU() {
     currentMap = new Map(spaceMap, size, craft);
     
     currentMap->setPhenomenon();
-    craft->moveCraft(currentMap->destination);
+    craft->moveCraft(currentMap);
+
+    free(craft); free(currentMap);
 }
 
 void RoutingUnit::navigate(Cardinal destination) {

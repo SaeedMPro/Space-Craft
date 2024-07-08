@@ -29,10 +29,10 @@ class SpaceObject {
         ~SpaceObject() {}
 
     public:
-        Cardinal pos1;
-        Cardinal pos2;
-        Cardinal pos3;
-        Cardinal pos4;
+        Cardinal pos1; // up left
+        Cardinal pos2; // up right 
+        Cardinal pos3; // down left
+        Cardinal pos4; // down right
 };
 
 class SpaceCurrent {

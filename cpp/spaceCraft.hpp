@@ -2,10 +2,12 @@
 #define SPACE_CRAFT_HPP
 
 #include "Cardinal.hpp"
-#include "Procedures.hpp"
+#include "Map.hpp"
 #include <vector>
 #include <string>
 
+using namespace std;
+class Map;
 class SpaceCraft {
    public:
     SpaceCraft() {}
@@ -18,11 +20,17 @@ class SpaceCraft {
 
         int energy;
         Cardinal position;
-        Procedures algorithm;
         std::vector<std::string> logCraft;
     public:
-        void logDecision();
-        void moveCraft(Cardinal destination);
+        void logDecision(const std::string& decision);
+        void moveCraft(Map* currentMap);
+        bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap);
+        bool isValidPosition(int x, int y, Map * currentMap);
+
+        Cardinal move(Cardinal nextMove);
+        Cardinal orbit(SpaceObject so, Cardinal start,Cardinal pos);
+        Cardinal teleport(Wormhole wh, Cardinal start);
+        Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
 };
 
 #endif
