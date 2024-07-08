@@ -19,6 +19,7 @@ class Wormhole {
 
 class SpaceObject {
     public:
+        SpaceObject() {}
         SpaceObject(Cardinal pos) {
             pos1.x = pos.x; pos1.y = pos.y;
             pos2.x = pos.x; pos2.y = pos.y + 1;
