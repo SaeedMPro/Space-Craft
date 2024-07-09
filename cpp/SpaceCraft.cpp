@@ -1,13 +1,26 @@
 #include "SpaceCraft.hpp"
-#include <vector>
+
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 using namespace std;
+
 void SpaceCraft::logDecision(const std::string& decision) {
-    cout << "Decision: " << decision << endl;
+
+    fstream logFile("log.txt", ios::out | ios::app); 
+
+    if (!logFile.is_open()) {
+        throw runtime_error("Couldn't find that file");
+    }
+
+    logFile << decision << endl;
+
+    logFile.close();
 }
 
 void SpaceCraft::moveCraft(Map* currentMap) {
+    
     Cardinal destination;
     destination.x = currentMap->destination.x;
     destination.y = currentMap->destination.y;
