@@ -76,8 +76,7 @@ void Map::setPhenomenon()
 
 bool Map::isValidMove(int &x, int &y)
 {
-    // Implementation here
-    return true; // Placeholder
+    return x >= 0 && x < size.heightMap && y >= 0 && y < size.weightMap && grid[x][y] != '2';
 }
 
 char Map::getCellType(int& x, int& y) {

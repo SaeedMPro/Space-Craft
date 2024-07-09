@@ -15,7 +15,7 @@ void RoutingUnit::startRU() {
     int energy;
     vector<vector<char>> spaceMap;
 
-    bool ReadFile = false;
+    bool ReadFile = true;
 
     //Reading input from "testcase.txt":
     if (ReadFile){

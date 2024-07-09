@@ -36,6 +36,7 @@ class Map {
         void setPhenomenon();
         bool isValidMove(int& x, int& y);
         char getCellType(int& x, int& y);
+        
 };
 
 #endif
