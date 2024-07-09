@@ -2,11 +2,18 @@
 
 #include <iostream>
 #include <fstream>
+<<<<<<< Updated upstream
 #include <vector>
+=======
+>>>>>>> Stashed changes
 
 using namespace std;
 
 void SpaceCraft::logDecision(const std::string& decision) {
+<<<<<<< Updated upstream
+=======
+    // cout << "Decision: " << decision << endl;
+>>>>>>> Stashed changes
 
     fstream logFile("log.txt", ios::out | ios::app); 
 
@@ -26,16 +33,16 @@ void SpaceCraft::moveCraft(Map* currentMap) {
     destination.y = currentMap->destination.y;
 
     vector<vector<bool>> visited(currentMap->size.heightMap, vector<bool>(currentMap->size.weightMap, false));
-    if (backtrack(position, visited, currentMap)) {
+    if (backtrack(position, visited, currentMap, position)) {
         logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")");
     } else {
         logDecision("Failed to reach destination");
     }
 }
 
-bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap) {
+bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap, Cardinal pervious) {
     
-    cout << "Current: " << current.x << " " << current.y << endl;
+    // cout << "Current: " << current.x << " " << current.y << endl;
     if (currentMap->getCellType(current.x, current.y) == '5') {
         position = current; 
         return true;
@@ -45,45 +52,67 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
     visited[current.x][current.y] = true;
     position = current; 
 
-    const vector<pair<int, int>> directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+    char typeCurrent = currentMap->getCellType(current.x, current.y);
+    switch (typeCurrent)
+    {
+        case '4':
+            current = teleport(currentMap->wormhole, current); 
+            logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+            break;
+        case '0':
+            break;
+        case '3':
+            current = orbit(currentMap->spaceObject, pervious, current);
+            logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+            break;
+        case '1':
+            current = ride(currentMap->spaceCurrent, current);
+            logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+
+            break;  
+        // default :
+        //     temp = current;
+        // break;  
+    }
+
+    vector<pair<int, int>> fieldViewCraft = {{-1, 0}, {0, 1}, {1, 0}, {0, -1},
+                                            {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+
+    const vector<pair<int, int>> directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     for (const auto& direction : directions) {
+
         int newX = current.x + direction.first;
         int newY = current.y + direction.second;
+
+        // for (const auto& view : fieldViewCraft) {
+        //     int newX2 = current.x + direction.first;
+        //     int newY2 = current.y + direction.second;
+        //     if (isValidPosition(newX, newY, currentMap)) {
+        //         char typeView = currentMap->getCellType(newX, newY);
+                
+        //         if(typeView == '5') {
+        //             newX = newX2; newY = newY2;
+        //             break;   
+        //         }
+        //     } 
+        // }
+        
 
         if (isValidPosition(newX, newY, currentMap) && !visited[newX][newY]) {
             char cellType = currentMap->getCellType(newX, newY);
 
-            Cardinal temp = {newX, newY};
-            switch (cellType)
-            {
-            case '4':
-                // logDecision("Moving to (" + to_string(newX) + ", " + to_string(newY) + ")");
-                temp = teleport(currentMap->wormhole, {newX, newY}); 
-                break;
-            case '0':
-                // temp = move({newX, newY});    
-                break;
-            case '3':
-                if (!currentMap->spaceObject.visited) { temp = orbit(currentMap->spaceObject, current, {newX, newY});  currentMap->spaceObject.visited = true; }
-                else temp = current;
-                break;
-            case '1':
-                // logDecision("Moving to (" + to_string(newX) + ", " + to_string(newY) + ")");
-                temp = ride(currentMap->spaceCurrent, {newX, newY});
-                // cout << temp.x << " " << temp.y << endl;
-                break;  
-            // default :
-            //     temp = current;
-            // break;  
-            }
-
-            if (!(temp.x < 0 || temp.y < 0 || 
-            temp.x > currentMap->size.heightMap || 
-            temp.y > currentMap->size.weightMap)
-            )
-            {
-                if (backtrack(temp, visited, currentMap)) { return true; }
-                // logDecision("Backtrack from (" + to_string(newX) + ", " + to_string(newY) + ")");
+            if (isValidPosition(newX, newY, currentMap) && !visited[newY][newX]) {
+                char cellType = currentMap->getCellType(newX, newY);
+                if (cellType == '0' || cellType == '1' || cellType == '2' 
+                    || cellType == '3' || cellType == '4' || cellType == '5') { // Check for valid cell types
+                    // Move to the new position
+                    logDecision("Moving to (" + to_string(newX) + ", " + to_string(newY) + ")");
+                    if (backtrack({newX, newY}, visited, currentMap, current)) {
+                        return true;
+                    }
+                    // If moving to the new position didn't lead to a solution, backtrack
+                    logDecision("Backtracking from (" + to_string(newX) + ", " + to_string(newY) + ")");
+                }
             }
         }
     }

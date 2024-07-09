@@ -28,7 +28,7 @@ class SpaceCraft {
     public:
         void logDecision(const std::string& decision);
         void moveCraft(Map* currentMap);
-        bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap);
+        bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
         bool isValidPosition(int x, int y, Map * currentMap);
 
         Cardinal move(Cardinal nextMove);

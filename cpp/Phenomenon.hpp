@@ -42,9 +42,6 @@ class SpaceCurrent {
         SpaceCurrent(Cardinal pos1_, Cardinal pos2_) {
             pos1 = pos1_;
             pos2 = pos2_;
-
-            std::cout << pos1.x << " "  << pos1.y << "\n" ;
-            std::cout << pos2.x << " "  << pos2.y << "\n" ;
         }
         ~SpaceCurrent() {}
     public:
