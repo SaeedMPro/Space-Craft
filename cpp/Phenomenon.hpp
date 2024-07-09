@@ -2,6 +2,7 @@
 #define PHENOMENON_HPP
 
 #include "Cardinal.hpp"
+#include <iostream>
 
 class Wormhole {
     public:
@@ -29,6 +30,7 @@ class SpaceObject {
         ~SpaceObject() {}
 
     public:
+        bool visited;
         Cardinal pos1; // up left
         Cardinal pos2; // up right 
         Cardinal pos3; // down left
@@ -37,9 +39,12 @@ class SpaceObject {
 
 class SpaceCurrent {
     public:
-        SpaceCurrent(Cardinal pos1, Cardinal pos2) {
-            this->pos1 = pos1;
-            this->pos2 = pos2;
+        SpaceCurrent(Cardinal pos1_, Cardinal pos2_) {
+            pos1 = pos1_;
+            pos2 = pos2_;
+
+            std::cout << pos1.x << " "  << pos1.y << "\n" ;
+            std::cout << pos2.x << " "  << pos2.y << "\n" ;
         }
         ~SpaceCurrent() {}
     public:

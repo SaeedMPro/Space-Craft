@@ -3,6 +3,7 @@
 #include "Io.hpp"
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ void RoutingUnit::startRU() {
     int energy;
     vector<vector<char>> spaceMap;
 
-    //Reading input from "testcase.txt".
+    //Reading input from "testcase.txt":
     try {
         auto result = readInputFile("testcase.txt");
         size = get<0>(result);
@@ -41,6 +42,25 @@ void RoutingUnit::startRU() {
         cerr << e.what() << endl;
     }
 
+    //input from console:
+    // cin >> size[0] >> size[1];
+    // cin >> location.x >> location.y;
+    // cin >> energy;
+    // for (int i = 0; i < size[0]; i++) 
+    // {   
+    //     string line;
+    //     vector<char> row;
+    //     cin >> line;
+
+    //     for (char ch : line) {
+    //         if (ch != ' ') { 
+    //             row.push_back(ch);
+    //         }
+    //     }
+    //     spaceMap.push_back(row);
+    // }
+
+
     // Initialize SpaceCraft and Map according to input.
     craft = new SpaceCraft(energy, location);
     currentMap = new Map(spaceMap, size, craft);
@@ -48,7 +68,7 @@ void RoutingUnit::startRU() {
     currentMap->setPhenomenon();
     craft->moveCraft(currentMap);
 
-    free(craft); free(currentMap);
+    delete(craft); delete(currentMap);
 }
 
 void RoutingUnit::navigate(Cardinal destination) {

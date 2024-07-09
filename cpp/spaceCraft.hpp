@@ -7,6 +7,10 @@
 #include <string>
 
 using namespace std;
+
+class SpaceCurrent;
+class SpaceObject;
+class Wormhole;  
 class Map;
 class SpaceCraft {
    public:

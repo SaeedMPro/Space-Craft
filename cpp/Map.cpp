@@ -17,18 +17,19 @@ void Map::setPhenomenon()
         {
             if (grid[i][j] == '5') { destination.x = i; destination.y = j; continue; } //Set destination
 
-            if (grid[i][j] == '1' && count % 2 == 0)
-            {
-                temp.x = i; temp.y = j;
-                pos1.push_back(temp);
-                count++;
-            }
             if (grid[i][j] == '1' && count % 2 == 1)
             {
                 temp.x = i; temp.y = j;
                 pos2.push_back(temp);
                 count++;
             }
+            if (grid[i][j] == '1' && count % 2 == 0)
+            {
+                temp.x = i; temp.y = j; 
+                pos1.push_back(temp);
+                count++;
+            }
+            
         } 
     }
     for (size_t i = 0; i < count/2; i++)
@@ -38,9 +39,14 @@ void Map::setPhenomenon()
 
     //find Space Object.
     Cardinal pos;
-    for (size_t i = 0; i < size.heightMap; i++)
+    bool flag = false;
+    for (size_t i = 0; i < size.heightMap; i++){
         for (size_t j = 0; j < size.weightMap; j++)
-           if (grid[i][j] == '3') { pos.x = i, pos.y = j; } 
+           if (grid[i][j] == '3') { pos.x = i, pos.y = j; flag = true; break; } 
+
+        if (flag) break;
+    }
+        
         
     spaceObject = SpaceObject(pos);    
 
