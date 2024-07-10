@@ -30,8 +30,8 @@ class SpaceCraft {
         void moveCraft(Map* currentMap);
         bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
         bool isValidPosition(int x, int y, Map* currentMap);
+        Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
 
-        Cardinal move(Cardinal nextMove);
         Cardinal orbit(SpaceObject so, Cardinal start,Cardinal pos);
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);

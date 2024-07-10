@@ -11,7 +11,7 @@ void SpaceCraft::logDecision(const std::string& decision) {
         cout << "Decision: " << decision << endl;
     }
     else {
-    fstream logFile("log.txt", ios::out | ios::app); 
+    fstream logFile("Log.txt", ios::out | ios::app); 
 
     if (!logFile.is_open()) {
         throw runtime_error("Couldn't find that file");
@@ -26,8 +26,6 @@ void SpaceCraft::logDecision(const std::string& decision) {
 void SpaceCraft::moveCraft(Map* currentMap) {
     
     Cardinal destination = currentMap->destination;
-    // destination.x = currentMap->destination.x;
-    // destination.y = currentMap->destination.y;
 
     vector<vector<bool>> visited(currentMap->size.heightMap, vector<bool>(currentMap->size.weightMap, false));
     if (backtrack(position, visited, currentMap, position)) {
@@ -38,8 +36,6 @@ void SpaceCraft::moveCraft(Map* currentMap) {
 }
 
 bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap, Cardinal pervious) {
-    
-    // cout << "Current: " << current.x << " " << current.y << endl;---------------------------------------
     if (currentMap->getCellType(current.x, current.y) == '5') {
         position = current; 
         return true;
@@ -59,7 +55,7 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             position = current;
             break;
         case '3':
-            logDecision("Orbiting from (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+            logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")");
             current = orbit(currentMap->spaceObject, pervious, current);
             logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
             break;
@@ -73,21 +69,21 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             break;
     }
 
-    // vector<pair<int, int>> fieldViewCraft = {{-1, 0}, {0, 1}, {1, 0}, {0, -1},
-    //                                         {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
-
-    const vector<pair<int, int>> directions = {{1, 0}, {0, -1},{-1, 0}, {0, 1}};
+    const vector<pair<int, int>> directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     for (const auto& direction : directions) {
-        int newX = current.x + direction.first;
-        int newY = current.y + direction.second;
-            if(isValidPosition(newX,newY,currentMap) && !visited[newX][newY]){    
-                logDecision("Moving to (" + to_string(newX) + ", " + to_string(newY) + ")");
-                if(backtrack({newX,newY},visited,currentMap,current)){return true;}
-                logDecision("Backtracking from (" + to_string(newX) + ", " + to_string(newY) + ")");
-                }
+        Cardinal nextMove = {current.x + direction.first, current.y + direction.second};
+
+        nextMove = decision(currentMap, current, nextMove);
+        
+        
+        if(isValidPosition(nextMove.x,nextMove.y,currentMap) && !visited[nextMove.x][nextMove.y]){    
+            logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")");
+            if(backtrack(nextMove, visited, currentMap, current)){return true;}
+                logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")");
             }
-            visited[current.x][current.y] = false;
-            return false;
+        }
+        visited[current.x][current.y] = false;
+        return false;
         }
 
 
@@ -97,42 +93,36 @@ bool SpaceCraft::isValidPosition(int x, int y, Map* currentMap) {
         && currentMap->getCellType(x, y) != '2';
 }
 
-        // for (const auto& view : fieldViewCraft) {
-        //     int newX2 = current.x + direction.first;
-        //     int newY2 = current.y + direction.second;
-        //     if (isValidPosition(newX, newY, currentMap)) {
-        //         char typeView = currentMap->getCellType(newX, newY);
+Cardinal SpaceCraft::decision(Map* currentMap, Cardinal current, Cardinal nextMove) {
+    const vector<pair<int, int>> directions = {
+        {-1, -1},  {-1, 0}, {-1, 1}, 
+        {0, -1 },/*current*/{ 0, 1}, 
+        {1, -1 },  { 1, 0}, { 1, 1}
+    };
+
+    for (const auto& direction : directions) {
+        int x = current.x + direction.first;
+        int y = current.y + direction.second;
+
+        if (isValidPosition(x, y, currentMap)) {
+            char viewCellType = currentMap->getCellType(x, y);
+
+            if (viewCellType == '5') {
+                if (x == current.x || y == current.y) { return {x, y}; }
+                else{
+
+                    char xCellType = currentMap->getCellType(current.x, y);
+                    char yCellType = currentMap->getCellType(x, current.y);
+
+                    if (!(xCellType == '4' || xCellType == '3' || xCellType == '1')) { return {current.x, y}; }
+                    else if (!(yCellType == '4' || yCellType == '3' || yCellType == '1')) { return {x, current.y}; }
+                    else{ return nextMove; }
                 
-        //         if(typeView == '5') {
-        //             newX = newX2; newY = newY2;
-        //             break;   
-        //         }
-        //     } 
-        // }
-        
-
-        // if (isValidPosition(newX, newY, currentMap) && !visited[newX][newY]) {
-        //     char cellType = currentMap->getCellType(newX, newY);
-
-        //     if (isValidPosition(newX, newY, currentMap) && !visited[newY][newX]) {
-        //         char cellType = currentMap->getCellType(newX, newY);
-        //         if (cellType == '0' || cellType == '1' || cellType == '2' 
-        //             || cellType == '3' || cellType == '4' || cellType == '5') { // Check for valid cell types
-        //             // Move to the new position
-        //             logDecision("Moving to (" + to_string(newX) + ", " + to_string(newY) + ")");
-        //             if (backtrack({newX, newY}, visited, currentMap, current)) {
-        //                 return true;
-        //             }
-        //             // If moving to the new position didn't lead to a solution, backtrack
-        //             logDecision("Backtracking from (" + to_string(newX) + ", " + to_string(newY) + ")");
-        //    }
-
-        //     visited[current.x][current.y] = false;
-        //     return false;
-        // }
-
-Cardinal SpaceCraft::move(Cardinal nextMove)
-{
+                }
+            }
+        }
+    
+    }
     return nextMove;
 }
 

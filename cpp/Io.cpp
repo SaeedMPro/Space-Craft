@@ -1,7 +1,6 @@
 #include "Io.hpp"
 #include <fstream>
 #include <sstream>
-#include <stdexcept>
 #include <vector>
 
 using namespace std;
@@ -31,7 +30,7 @@ tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const stri
         iss >> location.x >> location.y >> energy;
     }
 
-     while (getline(file, line)) {
+    while (getline(file, line)) {
         vector<char> row;
         for (char ch : line) {
             if (ch != ' ') { 
