@@ -1,4 +1,4 @@
-#include "SpaceCraft.hpp"
+#include "../SpaceCraft.hpp"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -6,12 +6,12 @@
 using namespace std;
 
 void SpaceCraft::logDecision(const std::string& decision) {
-    bool consol = true;
+    bool consol = false;
     if (consol){
         cout << "Decision: " << decision << endl;
     }
     else {
-    fstream logFile("Log.txt", ios::out | ios::app); 
+    fstream logFile("../Test/Log.txt", ios::out | ios::app); 
 
     if (!logFile.is_open()) {
         throw runtime_error("Couldn't find that file");

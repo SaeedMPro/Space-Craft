@@ -1,6 +1,6 @@
-#include "Map.hpp"
-#include "SpaceCraft.hpp"
-#include "Phenomenon.hpp"
+#include "../Map.hpp"
+#include "../SpaceCraft.hpp"
+#include "../Phenomenon.hpp"
 #include <iostream>
 #include <vector>
 

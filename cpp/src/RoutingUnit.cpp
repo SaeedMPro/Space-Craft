@@ -1,6 +1,6 @@
-#include "RoutingUnit.hpp"
-#include "Cardinal.hpp"
-#include "Io.hpp"
+#include "../RoutingUnit.hpp"
+#include "../Cardinal.hpp"
+#include "../Io.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -20,7 +20,7 @@ void RoutingUnit::startRU() {
     //Reading input from "testcase.txt":
     if (ReadFile){
         try {
-            auto result = readInputFile("testcase.txt");
+            auto result = readInputFile("../Test/testcase.txt");
             size     = get<0>(result);
             location = get<1>(result);
             energy   = get<2>(result);
