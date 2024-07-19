@@ -51,7 +51,7 @@ def generate_map(x: int, y: int, start: Location) -> List[List[int]]:
             break
         start_current = Location(*random.choice(valid_steps))
         current_length += 1
-    grid[start_current.x][start_current.y] = 1  # Mark the end of the current
+    grid[start_current.x][start_current.y] = 1
 
     return grid
 

@@ -8,11 +8,11 @@
 
 using namespace std;
 
-
 class SpaceCraft;
 class SpaceCurrent;
 class SpaceObject;
-class Wormhole;  
+class Wormhole; 
+
 class Map {
     public:
         Map() {}
@@ -24,7 +24,7 @@ class Map {
         }
         ~Map() {}
 
-        std::vector<std::vector<char>> grid;
+        vector<vector<char>> grid;
         SpaceCraft* craft;  
         Cardinal destination;
         sizeMap size;

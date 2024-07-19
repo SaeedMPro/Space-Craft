@@ -11,6 +11,8 @@ void Map::setPhenomenon()
     Cardinal temp;
     vector<Cardinal> pos1, pos2;
     int count = 0;
+    int sclf = 0;
+    
     for (size_t i = 0; i < size.heightMap; i++)
     {
         for (size_t j = 0; j < size.weightMap; j++)
@@ -29,9 +31,13 @@ void Map::setPhenomenon()
                 pos1.push_back(temp);
                 count++;
             }
+            if (grid[i][j] == '2'){
+                sclf ++;
+            }
             
         } 
     }
+
     for (size_t i = 0; i < count/2; i++)
     {
         spaceCurrent.push_back(SpaceCurrent(pos1[i], pos2[i])); 
@@ -72,6 +78,9 @@ void Map::setPhenomenon()
         if (count == 2) break;
     }
     wormhole = Wormhole(pos11, pos22); 
+
+    craft->spaceCurrentLengthFactor = sclf;
+
 }
 
 bool Map::isValidMove(int &x, int &y)

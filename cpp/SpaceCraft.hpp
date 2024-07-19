@@ -12,6 +12,7 @@ class SpaceCurrent;
 class SpaceObject;
 class Wormhole;  
 class Map;
+
 class SpaceCraft {
    public:
     SpaceCraft() {}
@@ -22,19 +23,30 @@ class SpaceCraft {
     }
     ~SpaceCraft() {}
 
-        int energy;
+        int currentDirection;
         Cardinal position;
-        std::vector<std::string> logCraft;
+        vector<string> logCraft;
+        int spaceCurrentLengthFactor;
+
+        static const vector<vector<pair<int,int>>> allDirections;
+    
     public:
         void logDecision(const std::string& decision);
         void moveCraft(Map* currentMap);
         bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
         bool isValidPosition(int x, int y, Map* currentMap);
-        Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
+        bool enoughEnergy( int amount) const;
 
+        Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
         Cardinal orbit(SpaceObject so, Cardinal start,Cardinal pos);
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
+
+        
+    private : 
+        int  energy;
+        void consumeEnergy(int amount);
 };
+
 
 #endif
