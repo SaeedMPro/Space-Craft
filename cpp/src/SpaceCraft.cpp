@@ -71,10 +71,10 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
     {
         case '4':
             if (enoughEnergy(energy/2)){    
-                logDecision("Teleporting from (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                logDecision("Teleporting from (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 consumeEnergy(energy / 2);
                 current = teleport(currentMap->wormhole, current); 
-                logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 position = current;
             }else{
                 logDecision("out of energy! (Warmhole)");
@@ -84,22 +84,22 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
 
         case '3':
             if (enoughEnergy(3*4)){
-                logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")");
+                logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 consumeEnergy(3*4);
-                current = orbit(currentMap->spaceObject, pervious, current);
-                logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                current = orbit(currentMap->spaceObject, pervious, current, currentMap);
+                logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
             }else {
                 logDecision("out of energy (Orbit)");
                 return false;
             }
             break;
         case '1':
-            energyCost = spaceCurrentLengthFactor * 2;
+            energyCost = (spaceCurrentLengthFactor + 2) * 2;
             if (enoughEnergy(energyCost)){    
-                logDecision("Riding from (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                logDecision("Riding from (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 consumeEnergy(energyCost);
                 current = ride(currentMap->spaceCurrent, current);
-                logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 position = current;
             }else {
                 logDecision("out of energy (Space Current)");
@@ -109,15 +109,13 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
         default :
             if (enoughEnergy(1)){
                 consumeEnergy(1);
-                logDecision("Moving form (" + to_string(current.x) + ", " + to_string(current.y) + ")");
+                logDecision("Moving form (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy));
             }else {
                 logDecision("out of energy (Move)");
                 return false;
             }
             break;
     }
-
-    // const vector<pair<int, int>> directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     
     for (int i = 0; i < allDirections.size(); ++i){
         currentDirection = i;
@@ -134,23 +132,15 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             
             if(isValidPosition(nextMove.x,nextMove.y,currentMap) && !visited[nextMove.x][nextMove.y]){    
                 if(enoughEnergy(1)){
-                logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")");
+                logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 if(backtrack(nextMove, visited, currentMap, current)){return true;}
-                    logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")");
+                logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")" + "\t" + "; Energy : " + to_string(energy));
                 }else{
                     logDecision("out of energy (move)");
                 }
             }
         }
 
-        // energy = initialEnergy;
-        // position = initialStartLoc;
-        // cout << "---------------------------------------------------------------------------------\n";
-        // cout << "Directions for currentDirection " << currentDirection << ":\n";
-        // for (const auto& dir : directions) {
-        //     cout << "(" << dir.first << ", " << dir.second << ")\n";
-        // }
-        // cout << "---------------------------------------------------------------------------------\n";
     }
 
     visited[current.x][current.y] = false;
@@ -197,20 +187,21 @@ Cardinal SpaceCraft::decision(Map* currentMap, Cardinal current, Cardinal nextMo
     return nextMove;
 }
 
-Cardinal SpaceCraft::orbit(SpaceObject so, Cardinal start, Cardinal pos)
+Cardinal SpaceCraft::orbit(SpaceObject so, Cardinal start, Cardinal pos, Map* map)
 {
     
     // create bound of object
     int x1 = so.pos1.x, x2 = so.pos4.x,
         y1 = so.pos1.y, y2 = so.pos4.y; 
 
+    Cardinal result = start;
     // routing
-    if (start.x < x1) { start.x += 3; }
-    else if (start.x > x2) { start.x -= 3; }
-    else if(start.y < y1) { start.y += 3; }
-    else if(start.y > y2) { start.y -= 3; }
+    if (start.x < x1) { result.x += 3; }
+    else if (start.x > x2) { result.x -= 3; }
+    else if(start.y < y1) {  result.y += 3; }
+    else if(start.y > y2) { result.y -= 3; }
     
-    return start;
+    return (isValidPosition(result.x, result.y, map)) ? result : start;
 }
 
 Cardinal SpaceCraft::teleport(Wormhole wh, Cardinal start)
