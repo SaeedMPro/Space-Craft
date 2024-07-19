@@ -38,7 +38,7 @@ class SpaceCraft {
         bool enoughEnergy( int amount) const;
 
         Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
-        Cardinal orbit(SpaceObject so, Cardinal start,Cardinal pos);
+        Cardinal orbit(SpaceObject so, Cardinal start,Cardinal pos, Map* map);
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
 
