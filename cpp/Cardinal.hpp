@@ -8,4 +8,4 @@ struct Cardinal {
 struct sizeMap {
     int heightMap, weightMap;
 };
-#endif 
+#endif      
