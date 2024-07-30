@@ -36,7 +36,7 @@ class SpaceCraft {
         void moveCraft(Map* currentMap);
         bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
         bool isValidPosition(int x, int y, Map* currentMap);
-        bool enoughEnergy( int amount) const;
+        bool enoughEnergy(int amount) const;
 
         Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
         Cardinal orbit(SpaceObject so, Cardinal start, Map* map);

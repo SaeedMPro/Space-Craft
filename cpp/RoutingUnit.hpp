@@ -12,13 +12,11 @@ class RoutingUnit {
         RoutingUnit() {}
         ~RoutingUnit() {}
 
-        int energy;
         Map* currentMap;
         SpaceCraft* craft;
 
     public:
         void startRU();
-        void navigate(Cardinal destination);
 };
 
 #endif

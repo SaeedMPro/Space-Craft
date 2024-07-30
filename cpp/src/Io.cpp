@@ -41,7 +41,3 @@ tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const stri
     }
     return make_tuple(size, location, energy, spaceMap);
 }
-
-bool WriteLogFile(const string &file_path) {
-    return true;
-}

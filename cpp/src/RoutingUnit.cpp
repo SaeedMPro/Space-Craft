@@ -62,7 +62,3 @@ void RoutingUnit::startRU() {
 
     delete(craft); delete(currentMap);
 }
-
-void RoutingUnit::navigate(Cardinal destination) {
-    // Not implemented yet
-}

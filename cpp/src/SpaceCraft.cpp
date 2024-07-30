@@ -17,7 +17,7 @@ const vector<vector<pair<int, int>>> SpaceCraft::allDirections = {
 };
 
 void SpaceCraft::logDecision(const string& decision,bool flagTempLog) {
-    bool consol = false;
+    bool consol = true;
     
     if (consol){
         if (flagTempLog){

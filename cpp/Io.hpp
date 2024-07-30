@@ -11,6 +11,5 @@ using namespace std;
 
 
 tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const string& file_path);
-bool WriteLogFile(const string& file_path);
 
 #endif
