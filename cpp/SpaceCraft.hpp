@@ -3,6 +3,7 @@
 
 #include "Cardinal.hpp"
 #include "Map.hpp"
+
 #include <vector>
 #include <string>
 
@@ -42,8 +43,7 @@ class SpaceCraft {
         Cardinal orbit(SpaceObject so, Cardinal start, Map* map);
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
-
-        
+   
     private : 
         int  energy;
         void consumeEnergy(int amount);

@@ -7,6 +7,7 @@
 
 class Map;
 class SpaceCraft;
+
 class RoutingUnit {
     public:
         RoutingUnit() {}

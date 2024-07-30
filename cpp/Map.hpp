@@ -4,6 +4,7 @@
 #include "SpaceCraft.hpp"
 #include "Phenomenon.hpp"
 #include "Cardinal.hpp"
+
 #include <vector>
 
 using namespace std;
@@ -35,8 +36,7 @@ class Map {
     public:
         void setPhenomenon();
         bool isValidMove(int& x, int& y);
-        char getCellType(int& x, int& y);
-        
+        char getCellType(int& x, int& y);        
 };
 
 #endif

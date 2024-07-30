@@ -2,6 +2,7 @@
 #define PHENOMENON_HPP
 
 #include "Cardinal.hpp"
+
 #include <iostream>
 
 class Wormhole {
@@ -44,6 +45,7 @@ class SpaceCurrent {
             pos2 = pos2_;
         }
         ~SpaceCurrent() {}
+        
     public:
         Cardinal pos1;
         Cardinal pos2;

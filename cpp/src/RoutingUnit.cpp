@@ -1,6 +1,7 @@
 #include "../RoutingUnit.hpp"
 #include "../Cardinal.hpp"
 #include "../Io.hpp"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,7 +19,7 @@ void RoutingUnit::startRU() {
     bool ReadFile = true;
 
     //Reading input from "testcase.txt":
-    if (ReadFile){
+    if (ReadFile) {
         try {
             auto result = readInputFile("../Test/testcase.txt");
             size     = get<0>(result);
@@ -26,7 +27,7 @@ void RoutingUnit::startRU() {
             energy   = get<2>(result);
             spaceMap = get<3>(result);
         } 
-            catch (const runtime_error& e) {
+            catch(const runtime_error& e) {
             cerr << "File not exists !" << endl;
             cerr << e.what() << endl;
             return;
@@ -36,24 +37,25 @@ void RoutingUnit::startRU() {
             cin >> size[0] >> size[1];
             cin >> location.x >> location.y;
             cin >> energy;
+
             spaceMap.resize(size[0]);
-            for (int i = 0; i < size[0]; i++){
+            for(int i = 0; i < size[0]; i++) {
                 string line;
                 cin >> ws;
                 getline(cin,line);
-                for(char ch : line){
-                    if(ch != ' '){
+                for(char ch : line) {
+                    if(ch != ' ') {
                         spaceMap[i].push_back(ch);
                 }
             }
         } 
-    }catch(const runtime_error& e){
+    } catch(const runtime_error& e) {
         cerr << "Wrong inputes !" << endl;
         cerr << e.what() << endl;
         return;
         }
     }
-    // Initialize SpaceCraft and Map according to input.
+    // Initialize SpaceCraft and Map according to input
     craft = new SpaceCraft(energy, location);
     currentMap = new Map(spaceMap, size, craft);
     
