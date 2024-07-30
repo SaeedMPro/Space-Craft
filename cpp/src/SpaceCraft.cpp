@@ -145,9 +145,29 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             nextMove = decision(currentMap, current, nextMove);
               
             if (isValidPosition(nextMove.x, nextMove.y, currentMap) && !visited[nextMove.x][nextMove.y]){    
-                if (enoughEnergy(1)){
+                if (enoughEnergy(1)) {
                 logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"  + "\t" + "; Energy : " + to_string(energy), true);
-                if (backtrack(nextMove, visited, currentMap, current)) {return true;}
+                if (backtrack(nextMove, visited, currentMap, current)) { return true; }
+                    int energyCostTwo = (spaceCurrentLengthFactor + 2) * 2;
+
+                    switch (currentMap->getCellType(nextMove.x, nextMove.y)) {
+
+                        case '4':
+                            consumeEnergy(energy / 2);
+                            break;
+
+                        case '3':
+                            consumeEnergy(3 * 4);
+                            break;
+
+                        case '1':
+                            consumeEnergy(energyCostTwo);
+                            break;
+
+                        default:
+                            consumeEnergy(1); 
+                            break;                   
+                    } 
                     logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
                 } else {
                     logDecision("Not Enough energy to (move)", true);
@@ -207,7 +227,7 @@ Cardinal SpaceCraft::orbit(SpaceObject so, Cardinal start, Map* map) {
     Cardinal result = start;
     // routing
     if (start.x < x1)      { result.x += 3; }
-    else if (start.x > x2) { result.x -= 3; }
+    else if(start.x > x2)  { result.x -= 3; }
     else if(start.y < y1)  { result.y += 3; }
     else if(start.y > y2)  { result.y -= 3; }
     
