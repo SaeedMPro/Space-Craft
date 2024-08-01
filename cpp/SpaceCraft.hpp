@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ class SpaceCraft {
         energy = energy_;
         position.x = startLoc.x;    
         position.y = startLoc.y;
+        time = 0;
     }
     ~SpaceCraft() {}
 
@@ -28,7 +30,6 @@ class SpaceCraft {
         Cardinal position;
         vector<string> logCraft;
         int spaceCurrentLengthFactor;
-
         vector<string> tempLog; 
         static const vector<vector<pair<int,int>>> allDirections;
     
@@ -38,6 +39,7 @@ class SpaceCraft {
         bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
         bool isValidPosition(int x, int y, Map* currentMap);
         bool enoughEnergy(int amount) const;
+        void setTime(int time);
 
         Cardinal decision(Map *currentMap, Cardinal current, Cardinal nextMove);
         Cardinal orbit(SpaceObject so, Cardinal start, Map* map);
@@ -45,7 +47,8 @@ class SpaceCraft {
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
    
     private : 
-        int  energy;
+        int time;
+        int energy;
         void consumeEnergy(int amount);
 };
 

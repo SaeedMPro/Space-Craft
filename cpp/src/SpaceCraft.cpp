@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+
     
 using namespace std;
 
@@ -45,21 +46,22 @@ void SpaceCraft::logDecision(const string& decision, bool flagTempLog) {
     }
 }
 
-void SpaceCraft::consumeEnergy(int amount) {
-    energy -= amount;
-}
+void SpaceCraft::consumeEnergy(int amount) { energy -= amount; }
 
-bool SpaceCraft::enoughEnergy(int amount) const {
-    return energy >= amount;
-}
+bool SpaceCraft::enoughEnergy(int amount) const { return energy >= amount; }
+
+void SpaceCraft::setTime(int time_) { time += time_; }
 
 void SpaceCraft::moveCraft(Map* currentMap) {
-    
+    int initialEnergy = energy;
     Cardinal destination = currentMap->destination;
 
     vector<vector<bool>> visited(currentMap->size.heightMap, vector<bool>(currentMap->size.weightMap, false));
     if (backtrack(position, visited, currentMap, position)) {
-        logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")", false);
+        logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")"
+         + " with Energy :" + to_string(initialEnergy - energy) 
+         + " with Time :" + to_string(time), false);
+
     } else {
         logDecision("Failed to reach destination", false);
     }
@@ -79,16 +81,26 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
     position = current; 
 
     char typeCurrent = currentMap->getCellType(current.x, current.y);
-    int energyCost   = 0;
+    int energyCost = 0;
+    int timeCost = 0;
 
     switch (typeCurrent) {
         case '4':
-            if (enoughEnergy(energy/2)) {    
-                logDecision("Teleporting from (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
-                consumeEnergy(energy / 2);
+            timeCost = 0;
+            if (enoughEnergy(floor(energy / 2))) {    
+                logDecision("Teleporting from (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+                
+                consumeEnergy(floor(energy / 2));
+                setTime(timeCost);
                 current = teleport(currentMap->wormhole, current);
                 visited[current.x][current.y] = true; 
-                logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+                
+
                 position = current;
             } else {
                 logDecision("Not Enough energy to (Warmhole)", true);
@@ -97,12 +109,20 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             break;
 
         case '3':
+            timeCost = 3*3;
             if (enoughEnergy(3*4)) {
-                logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+
                 consumeEnergy(3*4);
                 current = orbit(currentMap->spaceObject, pervious, currentMap);
                 visited[current.x][current.y] = true;
-                logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                setTime(timeCost);
+                logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+
             } else {
                 logDecision("Not Enough energy to (Orbit)", true);
                 return false;
@@ -110,13 +130,22 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             break;
 
         case '1':
-            energyCost = (spaceCurrentLengthFactor + 2) * 2;
+            energyCost = (spaceCurrentLengthFactor + 1) * 2;
+            timeCost = spaceCurrentLengthFactor + 1;
             if (enoughEnergy(energyCost)) {    
-                logDecision("Riding from (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Riding from (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+
                 consumeEnergy(energyCost);
+                setTime(timeCost);
                 current = ride(currentMap->spaceCurrent, current);
                 visited[current.x][current.y] = true;
-                logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
+                
+
                 position = current;
             } else {
                 logDecision("Not Enough energy to (Space Current)",true);
@@ -126,8 +155,11 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
 
         default:
             if (enoughEnergy(1)) {
-                logDecision("Moving form (" + to_string(current.x) + ", " + to_string(current.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Moving form (" + to_string(current.x) + ", " + to_string(current.y) + ")"
+                 + "\t" + "; Energy : " + to_string(energy)
+                 + "\t" + "; Time : " + to_string(time), true);
                 consumeEnergy(1);
+                setTime(5);
                 visited[current.x][current.y] = true;
             } else {
                 logDecision("Not Enough energy to (Move)", true);
@@ -150,29 +182,38 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
               
             if (isValidPosition(nextMove.x, nextMove.y, currentMap) && !visited[nextMove.x][nextMove.y]){    
                 if (enoughEnergy(1)) {
-                logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"  + "\t" + "; Energy : " + to_string(energy), true);
+                logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
+                  + "\t" + "; Energy : " + to_string(energy) 
+                  + "\t" + "; Time : " + to_string(time), true);
+
                 if (backtrack(nextMove, visited, currentMap, current)) { return true; }
                     int energyCostTwo = (spaceCurrentLengthFactor + 2) * 2;
 
                     switch (currentMap->getCellType(nextMove.x, nextMove.y)) {
 
                         case '4':
-                            consumeEnergy(energy / 2);
+                            setTime(0);
+                            consumeEnergy(floor(energy / 2));
                             break;
 
                         case '3':
+                            setTime(3*3);
                             consumeEnergy(3 * 4);
                             break;
 
                         case '1':
+                            setTime(spaceCurrentLengthFactor + 2);
                             consumeEnergy(energyCostTwo);
                             break;
 
                         default:
+                            setTime(5);
                             consumeEnergy(1); 
                             break;                   
                     } 
-                    logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")" + "\t" + "; Energy : " + to_string(energy), true);
+                    logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
+                     + "\t" + "; Energy : " + to_string(energy)
+                     + "\t" + "; Time : " + to_string(time), true);
                 } else {
                     logDecision("Not Enough energy to (move)", true);
                 }
@@ -223,7 +264,6 @@ Cardinal SpaceCraft::decision(Map* currentMap, Cardinal current, Cardinal nextMo
 }
 
 Cardinal SpaceCraft::orbit(SpaceObject so, Cardinal start, Map* map) {
-    
     // create bound of object
     int x1 = so.pos1.x, x2 = so.pos4.x,
         y1 = so.pos1.y, y2 = so.pos4.y; 
