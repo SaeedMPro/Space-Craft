@@ -4,9 +4,12 @@
 #include "Cardinal.hpp"
 #include "Map.hpp"
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <cmath>
+#include <fstream>
+
 
 using namespace std;
 
@@ -23,6 +26,7 @@ class SpaceCraft {
         position.x = startLoc.x;    
         position.y = startLoc.y;
         time = 0;
+        
     }
     ~SpaceCraft() {}
 
@@ -31,13 +35,14 @@ class SpaceCraft {
         vector<string> logCraft;
         int spaceCurrentLengthFactor;
         vector<string> tempLog;
-        vector<string> possiblePath; 
+        vector<vector<string>> possiblePath; 
+        vector<double> pathsIndex;
         static const vector<vector<pair<int,int>>> allDirections;
     
     public:
         void logDecision(const std::string& decision, bool flagTempLog = false);
         void moveCraft(Map* currentMap);
-        bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious);
+        bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious, vector<pair<int, int>> dir);
         bool isValidPosition(int x, int y, Map* currentMap);
         bool enoughEnergy(int amount) const;
         void setTime(int time);
@@ -46,6 +51,7 @@ class SpaceCraft {
         Cardinal orbit(SpaceObject so, Cardinal start, Map* map);
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
+        
    
     private : 
         int time;

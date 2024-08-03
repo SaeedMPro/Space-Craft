@@ -1,22 +1,5 @@
 #include "../SpaceCraft.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-
-using namespace std;
-
-const vector<vector<pair<int, int>>> SpaceCraft::allDirections = {
-    {{-1, 0},  {0 , 1},  {1 , 0},  {0 , -1}},
-    {{0 , 1},  {-1 , 0}, {0 , -1}, {1 , 0}},
-    {{-1, 0},  {0 , -1}, {1 , 0},  {0 , 1}},
-    {{0 , 1},  {1 , 0},  {0 , -1}, {-1 , 0}},
-    {{1 , 0},  {0 ,  1}, {-1 , 0}, {0 , -1}},
-    {{1 , 0},  {0 , -1}, {-1 , 0}, {0 , 1}},
-    {{0 , -1}, {-1 , 0}, {0 , 1},  {1 , 0}},
-    {{0 , -1}, {1  , 0}, {0 , 1 }, {-1 , 0}}
-};
-
 void SpaceCraft::logDecision(const string& decision, bool flagTempLog) {
     bool consol = true;
     
@@ -52,27 +35,36 @@ bool SpaceCraft::enoughEnergy(int amount) const { return energy >= amount; }
 void SpaceCraft::setTime(int time_) { time += time_; }
 
 void SpaceCraft::moveCraft(Map* currentMap) {
+
     int initialEnergy = energy;
     Cardinal destination = currentMap->destination;
+    Cardinal initialPosition = position;
+    
+    for (vector<pair<int, int>> dir : allDirections) {
+        vector<vector<bool>> visited(currentMap->size.heightMap, vector<bool>(currentMap->size.weightMap, false));
+        
+        energy = initialEnergy;
+        time = 0;
+        if (backtrack(initialPosition, visited, currentMap, initialPosition, dir)) {
+            pathsIndex.push_back(time);
 
-    vector<vector<bool>> visited(currentMap->size.heightMap, vector<bool>(currentMap->size.weightMap, false));
-    if (backtrack(position, visited, currentMap, position)) {
-        logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")"
-         + " with Energy :" + to_string(initialEnergy - energy) 
-         + " with Time :" + to_string(time), false);
+            logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")"
+            + " with Energy :" + to_string(initialEnergy - energy) 
+            + " with Time :" + to_string(time) + "\n", false);
 
-    } else {
-        logDecision("Failed to reach destination", false);
+        } else {
+            logDecision("Failed to reach destination", false);
+        }
     }
+    
 }
 
-bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap, Cardinal pervious) {
+bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap, Cardinal pervious, vector<pair<int, int>> dir) {
     if (currentMap->getCellType(current.x, current.y) == '5') {
-        position = current; 
         for (const auto& log : tempLog) {
             logDecision(log, false);
-            possiblePath.push_back(log);
         }
+        possiblePath.push_back(tempLog);
         tempLog.clear();
         return true;
     }
@@ -89,16 +81,16 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             timeCost = 0;
             if (enoughEnergy(floor(energy / 2))) {    
                 logDecision("Teleporting from (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
                 
                 consumeEnergy(floor(energy / 2));
                 setTime(timeCost);
                 current = teleport(currentMap->wormhole, current);
                 visited[current.x][current.y] = true; 
                 logDecision("Teleporting to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
                 
                 position = current;
             } else {
@@ -111,17 +103,18 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             timeCost = 3*3;
             if (enoughEnergy(3*4)) {
                 logDecision("Orbiting from (" + to_string(pervious.x) + ", " + to_string(pervious.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
 
                 consumeEnergy(3*4);
                 current = orbit(currentMap->spaceObject, pervious, currentMap);
                 visited[current.x][current.y] = true;
                 setTime(timeCost);
                 logDecision("Orbiting to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
 
+                position = current;
             } else {
                 logDecision("Not Enough energy to (Orbit)", true);
                 return false;
@@ -133,16 +126,16 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             timeCost = spaceCurrentLengthFactor + 1;
             if (enoughEnergy(energyCost)) {    
                 logDecision("Riding from (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
 
                 consumeEnergy(energyCost);
                 setTime(timeCost);
                 current = ride(currentMap->spaceCurrent, current);
                 visited[current.x][current.y] = true;
                 logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
         
                 position = current;
             } else {
@@ -154,8 +147,8 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
         default:
             if (enoughEnergy(1)) {
                 logDecision("Moving form (" + to_string(current.x) + ", " + to_string(current.y) + ")"
-                 + "\t" + "; Energy : " + to_string(energy)
-                 + "\t" + "; Time : " + to_string(time), true);
+                 + "\t\t" + "; Energy : " + to_string(energy)
+                 + "\t\t" + "; Time : " + to_string(time), true);
                 consumeEnergy(1);
                 setTime(5);
                 visited[current.x][current.y] = true;
@@ -166,56 +159,50 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
             break;
     }
     
-    for (int i = 0; i < allDirections.size(); ++i) {
-        currentDirection = i;
-        const vector<pair<int,int>>& directions = allDirections[currentDirection];
 
-        int initialEnergy = energy;
-        Cardinal initialStartLoc = position;
 
-        for (const auto& direction : directions) {                  
-            Cardinal nextMove = {current.x + direction.first, current.y + direction.second};
+    for (const auto& direction : dir) {                  
+        Cardinal nextMove = {current.x + direction.first, current.y + direction.second};
 
-            nextMove = decision(currentMap, current, nextMove);
-              
-            if (isValidPosition(nextMove.x, nextMove.y, currentMap) && !visited[nextMove.x][nextMove.y]){    
-                if (enoughEnergy(1)) {
-                logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
-                  + "\t" + "; Energy : " + to_string(energy) 
-                  + "\t" + "; Time : " + to_string(time), true);
+        nextMove = decision(currentMap, current, nextMove);
+            
+        if (isValidPosition(nextMove.x, nextMove.y, currentMap) && !visited[nextMove.x][nextMove.y]){    
 
-                if (backtrack(nextMove, visited, currentMap, current)) { return true; }
-                    int energyCostTwo = (spaceCurrentLengthFactor + 2) * 2;
+            logDecision("Moving to (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
+                + "\t\t" + "; Energy : " + to_string(energy) 
+                + "\t\t" + "; Time : " + to_string(time), true);
 
-                    switch (currentMap->getCellType(nextMove.x, nextMove.y)) {
-
-                        case '4':
-                            setTime(0);
-                            consumeEnergy(floor(energy / 2));
-                            break;
-
-                        case '3':
-                            setTime(3*3);
-                            consumeEnergy(3 * 4);
-                            break;
-
-                        case '1':
-                            setTime(spaceCurrentLengthFactor + 2);
-                            consumeEnergy(energyCostTwo);
-                            break;
-
-                        default:
-                            setTime(5);
-                            consumeEnergy(1); 
-                            break;                   
-                    } 
-                    logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
-                     + "\t" + "; Energy : " + to_string(energy)
-                     + "\t" + "; Time : " + to_string(time), true);
-                } else {
-                    logDecision("Not Enough energy to (move)", true);
-                }
+            if (backtrack(nextMove, visited, currentMap, current, dir)) { 
+                return true; 
             }
+            
+                int energyCostTwo = (spaceCurrentLengthFactor + 2) * 2;
+                switch (currentMap->getCellType(nextMove.x, nextMove.y)) {
+
+                    case '4':
+                        setTime(0);
+                        consumeEnergy(floor(energy / 2));
+                        break;
+
+                    case '3':
+                        setTime(3*3);
+                        consumeEnergy(3 * 4);
+                        break;
+
+                    case '1':
+                        setTime(spaceCurrentLengthFactor + 2);
+                        consumeEnergy(energyCostTwo);
+                        break;
+
+                    default:
+                        setTime(5);
+                        consumeEnergy(1); 
+                        break;                   
+                } 
+                logDecision("Backtracking from (" + to_string(nextMove.x) + ", " + to_string(nextMove.y) + ")"
+                    + "\t\t" + "; Energy : " + to_string(energy)
+                    + "\t\t" + "; Time : " + to_string(time), true);
+
         }
     }
     visited[current.x][current.y] = false;
@@ -290,3 +277,32 @@ Cardinal SpaceCraft::ride(vector<SpaceCurrent> sc, Cardinal start) {
     }
     return start;   
 }
+
+const vector<vector<pair<int, int>>> SpaceCraft::allDirections = {
+    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}},
+    {{-1, 0}, {0, -1}, {1, 0}, {0, 1}},
+    {{-1, 0}, {1, 0}, {0, 1}, {0, -1}},
+    {{-1, 0}, {1, 0}, {0, -1}, {0, 1}},
+    {{-1, 0}, {0, 1}, {0, -1}, {1, 0}},
+    {{-1, 0}, {0, -1}, {0, 1}, {1, 0}},
+    {{0, 1}, {1, 0}, {0, -1}, {-1, 0}},
+    {{0, 1}, {-1, 0}, {0, -1}, {1, 0}},
+    {{0, 1}, {0, -1}, {1, 0}, {-1, 0}},
+    {{0, 1}, {0, -1}, {-1, 0}, {1, 0}},
+    {{0, 1}, {1, 0}, {-1, 0}, {0, -1}},
+    {{0, 1}, {-1, 0}, {1, 0}, {0, -1}},
+    {{1, 0}, {0, 1}, {-1, 0}, {0, -1}},
+    {{1, 0}, {0, -1}, {-1, 0}, {0, 1}},
+    {{1, 0}, {0, 1}, {0, -1}, {-1, 0}},
+    {{1, 0}, {0, -1}, {0, 1}, {-1, 0}},
+    {{1, 0}, {-1, 0}, {0, 1}, {0, -1}},
+    {{1, 0}, {-1, 0}, {0, -1}, {0, 1}},
+    {{1, 0}, {0, 1}, {0, -1}, {-1, 0}},
+    {{1, 0}, {0, -1}, {0, 1}, {-1, 0}},
+    {{0, -1}, {1, 0}, {0, 1}, {-1, 0}},
+    {{0, -1}, {1, 0}, {-1, 0}, {0, 1}},
+    {{0, -1}, {0, 1}, {1, 0}, {-1, 0}},
+    {{0, -1}, {0, 1}, {-1, 0}, {1, 0}},
+    {{0, -1}, {-1, 0}, {0, 1}, {1, 0}},
+    {{0, -1}, {-1, 0}, {1, 0}, {0, 1}}
+};
