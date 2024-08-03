@@ -4,7 +4,6 @@
 #include <fstream>
 #include <vector>
 
-    
 using namespace std;
 
 const vector<vector<pair<int, int>>> SpaceCraft::allDirections = {
@@ -70,8 +69,9 @@ void SpaceCraft::moveCraft(Map* currentMap) {
 bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map* currentMap, Cardinal pervious) {
     if (currentMap->getCellType(current.x, current.y) == '5') {
         position = current; 
-        for (const auto& log : tempLog){
+        for (const auto& log : tempLog) {
             logDecision(log, false);
+            possiblePath.push_back(log);
         }
         tempLog.clear();
         return true;
@@ -81,8 +81,8 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
     position = current; 
 
     char typeCurrent = currentMap->getCellType(current.x, current.y);
-    int energyCost = 0;
-    int timeCost = 0;
+    int  energyCost = 0;
+    int  timeCost = 0;
 
     switch (typeCurrent) {
         case '4':
@@ -100,7 +100,6 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
                  + "\t" + "; Energy : " + to_string(energy)
                  + "\t" + "; Time : " + to_string(time), true);
                 
-
                 position = current;
             } else {
                 logDecision("Not Enough energy to (Warmhole)", true);
@@ -144,8 +143,7 @@ bool SpaceCraft::backtrack(Cardinal current, vector<vector<bool>>& visited, Map*
                 logDecision("Riding to (" + to_string(current.x) + ", " + to_string(current.y) + ")"
                  + "\t" + "; Energy : " + to_string(energy)
                  + "\t" + "; Time : " + to_string(time), true);
-                
-
+        
                 position = current;
             } else {
                 logDecision("Not Enough energy to (Space Current)",true);
@@ -247,7 +245,7 @@ Cardinal SpaceCraft::decision(Map* currentMap, Cardinal current, Cardinal nextMo
 
             if (viewCellType == '5') {
                 if (x == current.x || y == current.y) { return {x, y}; }
-                else{
+                else {
                     char xCellType = currentMap->getCellType(current.x, y);
                     char yCellType = currentMap->getCellType(x, current.y);
 

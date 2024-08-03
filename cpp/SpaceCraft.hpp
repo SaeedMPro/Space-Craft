@@ -30,7 +30,8 @@ class SpaceCraft {
         Cardinal position;
         vector<string> logCraft;
         int spaceCurrentLengthFactor;
-        vector<string> tempLog; 
+        vector<string> tempLog;
+        vector<string> possiblePath; 
         static const vector<vector<pair<int,int>>> allDirections;
     
     public:
