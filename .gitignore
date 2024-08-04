@@ -1,5 +1,5 @@
 *.exe
 .vscode
 \coverage
-cpp\Test\Log.txt
-cpp\Test\testcase.txt
+cpp\Test\*.txt
+
