@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "RoutingUnit.hpp"
 
 using namespace std;
 
@@ -61,6 +62,14 @@ void RoutingUnit::startRU() {
     
     currentMap->setPhenomenon();
     craft->moveCraft(currentMap);
+    int minIndex = minimumPath(craft->possiblePath, craft->pathsIndex);
+
+    cout << "Routing Unit finished" << endl;
 
     delete(craft); delete(currentMap);
+}
+
+int RoutingUnit::minimumPath(vector<vector<string>> possiblePath, vector<double> pathsIndex)
+{
+
 }

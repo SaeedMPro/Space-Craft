@@ -18,6 +18,7 @@ class RoutingUnit {
 
     public:
         void startRU();
+        int minimumPath(vector<vector<string>> possiblePath, vector<double> pathsIndex);
 };
 
 #endif

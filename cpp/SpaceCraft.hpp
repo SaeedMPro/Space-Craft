@@ -40,7 +40,7 @@ class SpaceCraft {
         static const vector<vector<pair<int,int>>> allDirections;
     
     public:
-        void logDecision(const std::string& decision, bool flagTempLog = false);
+        void logDecision(const std::string& decision);
         void moveCraft(Map* currentMap);
         bool backtrack(Cardinal current, vector<vector<bool>>& visited, Map * currentMap, Cardinal pervious, vector<pair<int, int>> dir);
         bool isValidPosition(int x, int y, Map* currentMap);
