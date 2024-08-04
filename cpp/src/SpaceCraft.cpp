@@ -23,7 +23,7 @@ void SpaceCraft::moveCraft(Map* currentMap) {
         time = 0;
         if (backtrack(initialPosition, visited, currentMap, initialPosition, dir)) {
 
-            logDecision("Arrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")"
+            logDecision("\nArrived at destination (" + to_string(destination.x) + ", " + to_string(destination.y) + ")"
             + " with Energy :" + to_string(initialEnergy - energy) 
             + " with Time :" + to_string(time) + "\n");
 

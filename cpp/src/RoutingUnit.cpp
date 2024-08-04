@@ -9,7 +9,7 @@
 using namespace std;
 
 void RoutingUnit::startRU() {
-    cout << "Routing Unit started" << endl;
+    cout << "---Routing Unit started---" << "\n\n";
     
     vector<int> size(2);
     Cardinal location;
@@ -64,14 +64,16 @@ void RoutingUnit::startRU() {
     craft->moveCraft(currentMap);
     int minIndex = minimumPath(craft->pathsIndex);
 
-    cout << "Routing Unit finished" << endl;
+    writeOutput(craft->possiblePath[minIndex]);
+
+    cout << "---Routing Unit finished---" << endl;
 
     delete(craft); delete(currentMap);
 }
 
-int RoutingUnit::minimumPath(vector<int> pathsIndex)
+int RoutingUnit::minimumPath(const vector<int> pathsIndex)
 {   
-    int minIndex;
+    int minIndex = -1;
     int minAmount = INT_MAX;
     for (int i = 0; i < pathsIndex.size(); ++i)
         if (pathsIndex[i] < minAmount) { minIndex = i; minAmount = pathsIndex[i];}

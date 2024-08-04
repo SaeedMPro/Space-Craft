@@ -36,7 +36,7 @@ class SpaceCraft {
         int spaceCurrentLengthFactor;
         vector<string> tempLog;
         vector<vector<string>> possiblePath; 
-        vector<double> pathsIndex;
+        vector<int> pathsIndex;
         static const vector<vector<pair<int,int>>> allDirections;
     
     public:

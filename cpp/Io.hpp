@@ -11,5 +11,5 @@
 using namespace std;
 
 tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const string& file_path);
-
+void writeOutput(vector<string> path);
 #endif

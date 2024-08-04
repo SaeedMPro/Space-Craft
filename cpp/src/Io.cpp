@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 
+
 using namespace std;
 
 tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const string& file_path) {
@@ -40,4 +41,31 @@ tuple<vector<int>, Cardinal, int, vector<vector<char>>> readInputFile(const stri
         spaceMap.push_back(row);
     }
     return make_tuple(size, location, energy, spaceMap);
+}
+
+void writeOutput(vector<string> path)
+{
+    bool writeInConsol = false; 
+
+    if (writeInConsol) { // write in terminal.
+
+        for (string str : path)
+        {
+            cout << str << endl;
+        }
+    } else { // write in the "Log.txt" file.
+
+        fstream logFile("../Test/Log.txt", ios::out);
+
+        if (!logFile.is_open()) {
+            throw runtime_error("Couldn't Open the Log file!");
+        }
+        for (string str : path)
+        {
+            logFile << str << endl;
+        }
+
+        logFile.close();
+        cout << "It was successfully written into the file..\n\n";
+    }
 }
