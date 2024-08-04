@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "RoutingUnit.hpp"
 
 using namespace std;
 
@@ -56,20 +55,26 @@ void RoutingUnit::startRU() {
         return;
         }
     }
+
     // Initialize SpaceCraft and Map according to input
     craft = new SpaceCraft(energy, location);
     currentMap = new Map(spaceMap, size, craft);
     
     currentMap->setPhenomenon();
     craft->moveCraft(currentMap);
-    int minIndex = minimumPath(craft->possiblePath, craft->pathsIndex);
+    int minIndex = minimumPath(craft->pathsIndex);
 
     cout << "Routing Unit finished" << endl;
 
     delete(craft); delete(currentMap);
 }
 
-int RoutingUnit::minimumPath(vector<vector<string>> possiblePath, vector<double> pathsIndex)
-{
+int RoutingUnit::minimumPath(vector<int> pathsIndex)
+{   
+    int minIndex;
+    int minAmount = INT_MAX;
+    for (int i = 0; i < pathsIndex.size(); ++i)
+        if (pathsIndex[i] < minAmount) { minIndex = i; minAmount = pathsIndex[i];}
 
+    return minIndex;
 }
