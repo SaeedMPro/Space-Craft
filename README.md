@@ -4,7 +4,9 @@
 ## Project Details
 
 **Instructor**: Dr. Mir Hossein Dezfoulian
+
 **Course**: Design and Analysis of Algorithms - Spring 2024
+
 **Project by**: Navid P. Panahi
 
 ## Overview
@@ -39,9 +41,24 @@ location: unknown
    ```
 2. Navigate to the project directory:
    ```
-   cd space-craft
+   cd cpp\src
    ```
+3. Run program:
+   ```
+   g++ -o app *.cpp && .\app
+   ```
+## Generate Test Case Automatically
+You can automatically generate a test case and you can also see it in the file `testcase.txt` .
 
+(some rules may be violated in its production, so make sure)
+1. Navigate to the project directory:
+   ```
+   cd cpp\test
+   ```
+2. Generate:
+   ```
+   Python testcaeGen.py
+   ```
 ## Usage
 
 ### Input Format
@@ -83,14 +100,15 @@ The output is the result of the logging system detailing each decision made by t
 
 ## Scenarios
 
-1. **Infinite energy_no time constraint:** (implemented) The spacecraft must arrive at its
+1. **Infinite energy_no time constraint:**  The spacecraft must arrive at its
    destination without further challenges.
-2. **Finite energy_no time constraint:** (implemented) The spacecraft must arrive at its
+2. **Finite energy_no time constraint:**  The spacecraft must arrive at its
    destination before it runs out of its limited supply of energy.
-3. **Finiteenergy_timeconstraint:** (not implemented!) The space craft must arrive at its destination
+3. **Finite energy_time constraint:**  The space craft must arrive at its destination
    before it runs out of its limited supply of energy in the shortest amount
    time possible
 
 ## Class Diagram
 
-![UML-diagram](https://github.com/user-attachments/assets/7e9f76d0-68fc-4c7a-97a1-3262c3cf46f0)
+![image](https://github.com/user-attachments/assets/be872c96-851a-4d8c-bb7a-86639fbef3d8)
+
