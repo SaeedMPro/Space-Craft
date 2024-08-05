@@ -45,7 +45,7 @@ void Map::setPhenomenon() {
     Cardinal pos;
     bool flag = false;
     
-    for (size_t i = 0; i < size.heightMap; i++){
+    for (size_t i = 0; i < size.heightMap; i++) {
         for (size_t j = 0; j < size.weightMap; j++)
            if (grid[i][j] == '3') { pos.x = i, pos.y = j; flag = true; break; } 
 

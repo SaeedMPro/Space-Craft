@@ -71,8 +71,7 @@ void RoutingUnit::startRU() {
     delete(craft); delete(currentMap);
 }
 
-int RoutingUnit::minimumPath(const vector<int> pathsIndex)
-{   
+int RoutingUnit::minimumPath(const vector<int> pathsIndex) {   
     int minIndex = -1;
     int minAmount = INT_MAX;
     for (int i = 0; i < pathsIndex.size(); ++i)

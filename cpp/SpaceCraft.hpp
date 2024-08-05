@@ -10,7 +10,6 @@
 #include <cmath>
 #include <fstream>
 
-
 using namespace std;
 
 class SpaceCurrent;
@@ -52,12 +51,10 @@ class SpaceCraft {
         Cardinal teleport(Wormhole wh, Cardinal start);
         Cardinal ride(vector<SpaceCurrent> sc, Cardinal start);
         
-   
-    private : 
+    private: 
         int time;
         int energy;
         void consumeEnergy(int amount);
 };
-
 
 #endif
