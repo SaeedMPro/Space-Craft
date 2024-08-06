@@ -1,0 +1,30 @@
+Moving form (0, 5)			; Energy : 100			; Time : 0
+Moving to (0, 4)			; Energy : 99			; Time : 5
+Moving form (0, 4)			; Energy : 99			; Time : 5
+Moving to (0, 3)			; Energy : 98			; Time : 10
+Moving form (0, 3)			; Energy : 98			; Time : 10
+Moving to (0, 2)			; Energy : 97			; Time : 15
+Moving form (0, 2)			; Energy : 97			; Time : 15
+Moving to (0, 1)			; Energy : 96			; Time : 20
+Moving form (0, 1)			; Energy : 96			; Time : 20
+Moving to (0, 0)			; Energy : 95			; Time : 25
+Moving form (0, 0)			; Energy : 95			; Time : 25
+Moving to (1, 0)			; Energy : 94			; Time : 30
+Moving form (1, 0)			; Energy : 94			; Time : 30
+Moving to (2, 0)			; Energy : 93			; Time : 35
+Moving form (2, 0)			; Energy : 93			; Time : 35
+Moving to (3, 0)			; Energy : 92			; Time : 40
+Moving form (3, 0)			; Energy : 92			; Time : 40
+Moving to (4, 0)			; Energy : 91			; Time : 45
+Teleporting from (4, 0)			; Energy : 91			; Time : 45
+Teleporting to (4, 1)			; Energy : 46			; Time : 45
+Moving to (5, 1)			; Energy : 46			; Time : 45
+Moving form (5, 1)			; Energy : 46			; Time : 45
+Moving to (5, 0)			; Energy : 45			; Time : 50
+Moving form (5, 0)			; Energy : 45			; Time : 50
+Moving to (6, 0)			; Energy : 44			; Time : 55
+Moving form (6, 0)			; Energy : 44			; Time : 55
+Moving to (7, 0)			; Energy : 43			; Time : 60
+
+Arrived at destination (7, 0) with Energy :57 with Time :60
+
