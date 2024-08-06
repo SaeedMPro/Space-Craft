@@ -62,10 +62,17 @@ void RoutingUnit::startRU() {
     
     currentMap->setPhenomenon();
     craft->moveCraft(currentMap);
-    int minIndex = minimumPath(craft->pathsIndex);
 
-    writeOutput(craft->possiblePath[minIndex]);
-
+    if (!craft->pathsIndex.empty())
+    {
+        int minIndex = minimumPath(craft->pathsIndex);
+        writeOutput(craft->possiblePath[minIndex]);
+    } 
+    else 
+    {
+        cout << "Failed to reach destination\n\n";
+    }
+    
     cout << "---Routing Unit finished---" << endl;
 
     delete(craft); delete(currentMap);

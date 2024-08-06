@@ -27,14 +27,12 @@ void SpaceCraft::moveCraft(Map* currentMap) {
             + " with Energy :" + to_string(initialEnergy - energy) 
             + " with Time :" + to_string(time) + "\n");
 
+            possiblePath.push_back(tempLog);
+            pathsIndex.push_back(time);
         } else {
             logDecision("Failed to reach destination");
         }
-
-        possiblePath.push_back(tempLog);
-        pathsIndex.push_back(time);
         tempLog.clear();
-
     }
     
 }
